@@ -2,7 +2,7 @@
 
 import { ChevronLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react"; // 👈 ШААРДЛАГАТАЙ ИМПОРТ
+import { useState } from "react";
 
 export default function Step1({ email, setEmail, goNext }) {
   const router = useRouter();

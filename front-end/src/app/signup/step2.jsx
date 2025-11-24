@@ -1,10 +1,11 @@
 "use client";
 
+import axios from "axios";
 import { ChevronLeftIcon } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Step2({ goBack }) {
+export default function Step2({ email, goBack }) {
   const router = useRouter();
 
   const [password, setPassword] = useState("");
@@ -13,12 +14,38 @@ export default function Step2({ goBack }) {
 
   const passwordMatch = password && confirm && password === confirm;
 
+  async function createUser() {
+    if (!email || !passwordMatch) {
+      alert("Email or password invalid!");
+      return;
+    }
+
+    console.log("Sending to backend:", { email, password });
+
+    try {
+      const response = await axios.post(
+        "http://localhost:999/users",
+        {
+          email,
+          password,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("Амжилттай:", response.data);
+      router.push("/login");
+    } catch (error) {
+      console.error("Алдаа:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Алдаа гарлаа!");
+    }
+  }
+
   return (
     <>
-      {/* Back Button */}
       <ChevronLeftIcon className="cursor-pointer" onClick={goBack} />
 
-      {/* Title */}
       <div className="flex flex-col gap-1">
         <p className="text-2xl font-semibold">Create a strong password</p>
         <p className="text-[#71717A] text-sm">
@@ -26,7 +53,6 @@ export default function Step2({ goBack }) {
         </p>
       </div>
 
-      {/* Password Inputs */}
       <div className="flex flex-col gap-2 w-full">
         <input
           type={show ? "text" : "password"}
@@ -44,7 +70,6 @@ export default function Step2({ goBack }) {
           className="border border-[#c9c9d3] rounded-md w-full h-10 px-3 text-sm"
         />
 
-        {/* Show password */}
         <label className="flex items-center gap-2 text-sm cursor-pointer">
           <input
             type="checkbox"
@@ -55,10 +80,9 @@ export default function Step2({ goBack }) {
         </label>
       </div>
 
-      {/* Continue Button */}
       <button
         disabled={!passwordMatch}
-        onClick={() => router.push("/login")} // ⬅ LOGIN PAGE-RU MOVE
+        onClick={createUser}
         className={`flex justify-center items-center rounded-md w-full h-10 text-white font-medium ${
           !passwordMatch ? "bg-gray-200 cursor-not-allowed" : "bg-[#18181B]"
         }`}
@@ -66,12 +90,11 @@ export default function Step2({ goBack }) {
         Let&apos;s Go
       </button>
 
-      {/* Footer */}
       <div className="flex gap-2 text-sm">
         <p className="text-[#71717A]">Already have an account?</p>
         <p
           className="text-[#2563EB] cursor-pointer"
-          onClick={() => router.push("/login")} // ⬅ LOGIN PAGE-RU SHIFT
+          onClick={() => router.push("/login")}
         >
           Log in
         </p>

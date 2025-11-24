@@ -1,19 +1,52 @@
+// const express = require("express");
+// const connectToDB = require("./db");
+// const cors = require("cors"); // ← Cors-г импортлох
+
+// const app = express();
+
+// // 🔹 CORS-г хамгийн эхэнд middleware болгон нэмэх
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", // frontend порт
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//   })
+// );
+
+// // JSON body унших
+// app.use(express.json());
+
+// // MongoDB холболт
+// connectToDB();
+
+// // Routes
+// const productRoutes = require("./routes/productRoutes");
+// const userRoutes = require("./routes/userRoutes");
+
+// app.use("/products", productRoutes);
+// app.use("/users", userRoutes);
+
+// // Сервер эхлүүлэх
+// app.listen(999, () => console.log("Server running on port 999"));
 const express = require("express");
 const connectToDB = require("./db");
+const cors = require("cors");
+
 const app = express();
 
-// Middleware
-app.use(express.json());
+// CORS middleware
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
-// MongoDB холболт
+app.use(express.json());
 connectToDB();
 
 // Routes
-const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
-
-app.use("/products", productRoutes);
 app.use("/users", userRoutes);
 
-// Сервер эхлүүлэх
+// Server
 app.listen(999, () => console.log("Server running on port 999"));

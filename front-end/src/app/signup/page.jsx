@@ -16,13 +16,7 @@ export default function SignUp() {
           <Step1 email={email} setEmail={setEmail} goNext={() => setStep(2)} />
         )}
 
-        {step === 2 && (
-          <Step2
-            email={email}
-            goBack={() => setStep(1)}
-            goNext={() => setStep(3)}
-          />
-        )}
+        {step === 2 && <Step2 email={email} goBack={() => setStep(1)} />}
       </div>
 
       <div className="flex justify-center items-center">
