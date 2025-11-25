@@ -14,24 +14,44 @@ export default function Step2({ email, goBack }) {
 
   const passwordMatch = password && confirm && password === confirm;
 
+  // async function createUser() {
+  //   if (!email || !passwordMatch) {
+  //     alert("Email or password invalid!");
+  //     return;
+  //   }
+
+  //   console.log("Sending to backend:", { email, password });
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:999/users",
+  //       {
+  //         email,
+  //         password,
+  //       },
+  //       {
+  //         headers: { "Content-Type": "application/json" },
+  //       }
+  //     );
+
+  //     console.log("Амжилттай:", response.data);
+  //     router.push("/login");
+  //   } catch (error) {
+  //     console.error("Алдаа:", error.response?.data || error.message);
+  //     alert(error.response?.data?.message || "Алдаа гарлаа!");
+  //   }
+  // }
   async function createUser() {
     if (!email || !passwordMatch) {
       alert("Email or password invalid!");
       return;
     }
 
-    console.log("Sending to backend:", { email, password });
-
     try {
       const response = await axios.post(
-        "http://localhost:999/users",
-        {
-          email,
-          password,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        "http://localhost:999/users/signup",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
       );
 
       console.log("Амжилттай:", response.data);

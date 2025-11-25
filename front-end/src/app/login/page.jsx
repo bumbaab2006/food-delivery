@@ -3,11 +3,37 @@
 import { useState } from "react";
 import { ChevronLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // Алдааг хадгалах state
+
+  const handleLogin = async () => {
+    setErrorMessage("");
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:999/users/login", {
+        email,
+        password,
+      });
+      console.log(response.data);
+
+      if (response.data.loggedIn) {
+        // 🔹 Token хадгалах
+        localStorage.setItem("token", JSON.stringify(response.data.user));
+        router.push("/main"); // Амжилттай login бол main руу
+      }
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || "Алдаа гарлаа!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex w-full h-screen overflow-hidden justify-center">
@@ -38,13 +64,19 @@ export default function LoginPage() {
           />
         </div>
 
+        {/* 🔹 Алдааны текст */}
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+
         <button
-          disabled={!email || !password}
+          disabled={!email || !password || loading}
+          onClick={handleLogin}
           className={`flex justify-center items-center rounded-md w-full h-10 text-white font-medium ${
-            !email || !password ? "bg-gray-200" : "bg-[#18181B]"
+            !email || !password
+              ? "bg-gray-200 cursor-not-allowed"
+              : "bg-[#18181B]"
           }`}
         >
-          Log in
+          {loading ? "Loading..." : "Log in"}
         </button>
 
         <div className="flex gap-2 text-sm">
