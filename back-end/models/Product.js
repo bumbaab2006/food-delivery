@@ -11,6 +11,13 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    // category: {
+    //   type: String,
+    //   required: true,
+    // },
+    description: {
+      type: String,
+    },
     inStock: {
       type: Boolean,
       default: true,
@@ -19,5 +26,4 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// 2) Model үүсгэнэ
 module.exports = mongoose.model("Product", productSchema);
