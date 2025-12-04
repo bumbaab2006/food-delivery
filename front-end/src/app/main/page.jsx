@@ -1,12 +1,14 @@
 "use client";
 import { useEffect } from "react";
+import MainPageBody from "./Body";
 import Header from "./Header";
 import Footer from "./Footer";
 export default function MainPage() {
   return (
-    <div className="flex w-full flex-col items-center gap-[88px] bg-[#404040]">
+    <div className="flex w-full flex-col items-center  bg-[#404040]">
       <Header />
-      <Footer />
+      <MainPageBody />
+      {/* <Footer /> */}
     </div>
   );
 }
