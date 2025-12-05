@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import MainPageBody from "./Body";
 import Header from "./Header";
-import Footer from "./Footer";
 export default function MainPage() {
   return (
     <div className="flex w-full flex-col items-center  bg-[#404040]">

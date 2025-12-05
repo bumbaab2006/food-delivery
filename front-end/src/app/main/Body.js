@@ -5,7 +5,7 @@ import axios from "axios";
 import FoodModal from "@/components/FoodModal";
 import AddToCardIcon from "../_icons/AddToCardIcon";
 
-export default function FoodMenu() {
+export default function MainPageBody() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -48,7 +48,9 @@ export default function FoodMenu() {
       products: products.filter((p) => p.category === cat._id),
     }))
     .filter((cat) => (isDesktop ? cat.products.length > 0 : true));
-
+  console.log("Grouped Categories:", grouped);
+  console.log("All Products:", products);
+  console.log("categories:", categories);
   return (
     <div className="min-h-screen w-full bg-[#3C3C3C] p-12">
       <div className="max-w-[1600px] mx-auto space-y-20">
@@ -88,11 +90,11 @@ export default function FoodMenu() {
 
                     {/* FLOATING BUTTON */}
                     <button
-                      className="absolute bottom-5 right-5 w-[33px] h-[33px] bg-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition"
                       onClick={() => {
                         setSelectedCategory(cat._id);
                         setShowModal(true);
                       }}
+                      className="absolute bottom-5 right-5 w-[33px] h-[33px] bg-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition"
                     >
                       <AddToCardIcon />
                     </button>

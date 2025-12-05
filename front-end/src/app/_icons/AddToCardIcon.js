@@ -14,9 +14,9 @@ export default function AddToCardIcon() {
       <path
         d="M22.0026 17.333V26.6663M17.3359 21.9997H26.6693"
         stroke="#EF4444"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

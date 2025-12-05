@@ -10,10 +10,10 @@ export default function AddresRightChevronIcon() {
       <path
         d="M7.5 15L12.5 10L7.5 5"
         stroke="#18181B"
-        stroke-opacity="0.5"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeOpacity="0.5"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
