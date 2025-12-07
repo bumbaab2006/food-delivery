@@ -3,6 +3,7 @@ import LocationIcon from "../_icons/LocationIcon";
 import ShoppingIcon from "../_icons/ShoppingIcon";
 import UserIcon from "../_icons/UserIcon";
 import AddresRightChevronIcon from "../_icons/AddresRightChevronIcon";
+import CartDrawer from "@/components/Card";
 export default function Header() {
   return (
     <div className="flex flex-col w-full">
@@ -24,7 +25,12 @@ export default function Header() {
           </button>
 
           {/* Shopping Cart */}
-          <button className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 transition">
+          <button
+            className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+            onClick={() => {
+              <CartDrawer />;
+            }}
+          >
             <ShoppingIcon className="w-5 h-5" />
           </button>
 

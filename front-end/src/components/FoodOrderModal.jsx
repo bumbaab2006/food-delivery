@@ -1,48 +1,127 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 export default function FoodOrderModal({ product, onClose, onSuccess }) {
+  const [quantity, setQuantity] = useState(1);
+
+  const increase = () => setQuantity((q) => q + 1);
+  const decrease = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
+
   const handleOrder = async () => {
+    const total = product.price * quantity;
+
     try {
-      await axios.post("http://localhost:999/OrderedFoods", {
-        productId: product._id,
-        quantity: 1,
+      await axios.post("http://localhost:999/order-foods", {
+        foodItems: [
+          {
+            foodId: product._id,
+            name: product.name,
+            quantity: quantity,
+          },
+        ],
+        totalPrice: total,
       });
+
       onSuccess();
       onClose();
     } catch (error) {
-      console.error(
-        "Order failed:",
-        error.response?.data?.message || error.message
-      );
+      console.error("Order failed:", error.response?.data || error.message);
       alert("Failed to place order. Please try again.");
     }
   };
 
+  const totalPrice = (product.price * quantity).toFixed(2);
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Order {product.name}</h2>
-        <p className="mb-4">Price: ${product.price.toFixed(2)}</p>
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+      <div
+        className="
+          bg-white rounded-3xl max-w-4xl w-full 
+          grid grid-cols-1 md:grid-cols-2 overflow-hidden relative
+        "
+      >
+        {/* CLOSE BUTTON */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-3xl text-gray-600 hover:text-black z-50"
+        >
+          ×
+        </button>
 
-        <div className="flex justify-end gap-3">
-          <button
-            className="px-4 py-2 bg-gray-300 rounded"
-            type="button"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
+        {/* LEFT IMAGE */}
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-[380px] md:h-full object-cover"
+        />
 
-          <button
-            className="px-4 py-2 bg-green-500 text-white rounded"
-            type="button"
-            onClick={handleOrder}
-          >
-            Confirm Order
-          </button>
+        {/* RIGHT CONTENT */}
+        <div className="p-8 flex flex-col justify-between">
+          <div>
+            <h2 className="text-4xl font-bold text-red-500 mb-4">
+              {product.name}
+            </h2>
+
+            <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              Select quantity and confirm your order.
+            </p>
+
+            {/* PRICE */}
+            <p className="text-3xl font-semibold text-gray-900 mb-6">
+              Price: ${product.price}
+            </p>
+
+            {/* QUANTITY SELECTOR */}
+            <div className="flex items-center gap-5 mb-6">
+              <button
+                onClick={decrease}
+                className="
+                  w-12 h-12 rounded-full bg-gray-200 text-3xl 
+                  flex items-center justify-center hover:bg-gray-300 transition
+                "
+              >
+                –
+              </button>
+
+              <span className="text-3xl font-semibold w-10 text-center">
+                {quantity}
+              </span>
+
+              <button
+                onClick={increase}
+                className="
+                  w-12 h-12 rounded-full bg-gray-200 text-3xl
+                  flex items-center justify-center hover:bg-gray-300 transition
+                "
+              >
+                +
+              </button>
+            </div>
+
+            {/* TOTAL PRICE */}
+            <p className="text-2xl font-bold">
+              Total: <span className="text-green-600">${totalPrice}</span>
+            </p>
+          </div>
+
+          {/* ACTION BUTTONS */}
+          <div className="mt-10 flex items-center gap-4 justify-end">
+            <button
+              className="px-5 py-3 bg-gray-300 rounded-full text-lg hover:bg-gray-400 transition"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+
+            <button
+              className="px-6 py-3 bg-green-600 text-white rounded-full text-lg hover:bg-green-700 transition"
+              onClick={handleOrder}
+            >
+              Confirm Order
+            </button>
+          </div>
         </div>
       </div>
     </div>

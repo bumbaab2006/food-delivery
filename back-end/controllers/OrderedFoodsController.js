@@ -1,3 +1,5 @@
+const OrderedFoods = require("../models/OrderedFoods"); // ← ШИНЭ МӨР
+
 const OrderedFoodsController = {
   createOrderedFood: async (req, res) => {
     try {

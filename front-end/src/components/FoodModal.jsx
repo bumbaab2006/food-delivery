@@ -90,7 +90,7 @@ export default function FoodModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl p-8 w-96 relative">
         <h2 className="text-2xl font-bold mb-6">
           {editProduct ? "Edit Product" : "Add New Product"}

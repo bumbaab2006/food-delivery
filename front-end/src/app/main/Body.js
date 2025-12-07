@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FoodModal from "@/components/FoodModal";
 import AddToCardIcon from "../_icons/AddToCardIcon";
-
+import FoodOrderModal from "@/components/FoodOrderModal";
 export default function MainPageBody() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -14,7 +14,7 @@ export default function MainPageBody() {
   // See More state
   const [expandedCategories, setExpandedCategories] = useState({});
 
-  // Desktop check
+  // Desktop checks
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
 
   const toggleExpand = (catId) => {
@@ -137,11 +137,12 @@ export default function MainPageBody() {
 
       {/* ADD FOOD MODAL */}
       {showModal && (
-        <FoodModal
-          categories={categories}
-          selectedCategory={selectedCategory}
+        <FoodOrderModal
+          product={products.find((p) => p.category === selectedCategory) || {}}
           onClose={() => setShowModal(false)}
-          onSuccess={fetchProducts}
+          onSuccess={() => {
+            alert("Order placed successfully!");
+          }}
         />
       )}
     </div>
