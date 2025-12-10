@@ -14,7 +14,7 @@ const orderedFoodsSchema = new mongoose.Schema(
         price: { type: Number, required: true },
       },
     ],
-
+    deliveryLocation: { type: String, required: true },
     totalPrice: { type: Number, required: true },
 
     orderStatus: {

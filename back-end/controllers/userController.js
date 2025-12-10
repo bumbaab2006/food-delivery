@@ -30,6 +30,8 @@ exports.createUser = async (req, res) => {
 };
 
 // ------------------ LOGIN USER ------------------
+const jwt = require("jsonwebtoken");
+
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -55,11 +57,18 @@ exports.loginUser = async (req, res) => {
         .json({ message: "Email эсвэл password буруу байна" });
     }
 
-    // Амжилттай login
+    // 🔹 JWT токен үүсгэх
+    const token = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+
     res.status(200).json({
       message: "Амжилттай нэвтэрлээ",
       loggedIn: true,
-      user: { id: user._id, email: user.email },
+      token,
+      user: { id: user._id, email: user.email, role: user.role },
     });
   } catch (err) {
     console.error("Login error:", err);

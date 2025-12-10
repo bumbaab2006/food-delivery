@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // Role enum
-const UserRoleEnum = ["customer", "admin", "delivery"];
+const UserRoleEnum = ["customer", "admin"];
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     // phoneNumber: { type: Number, required: true },
     // address: { type: String, required: true },
-    // role: { type: String, enum: UserRoleEnum, default: "customer" },
+    role: { type: String, enum: UserRoleEnum, default: "customer" },
     // orderedFoods: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     // ttl: { type: Date },
     // isVerified: { type: Boolean, default: false },

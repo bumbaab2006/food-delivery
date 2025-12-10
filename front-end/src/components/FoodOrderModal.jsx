@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { Description } from "@radix-ui/react-dialog";
 
 export default function FoodOrderModal({ product, onClose, cart, setCart }) {
   const [quantity, setQuantity] = useState(1);
@@ -9,12 +10,14 @@ export default function FoodOrderModal({ product, onClose, cart, setCart }) {
   const increase = () => setQuantity((q) => q + 1);
   const decrease = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
 
-  const addToCart = async () => {
+  const addToCart = () => {
     const newItem = {
       _id: product._id,
       name: product.name,
       price: product.price,
-      quantity,
+      image: product.image,
+      quantity: quantity,
+      description: product.description,
     };
 
     const existingIndex = cart.findIndex((item) => item._id === product._id);
@@ -24,33 +27,9 @@ export default function FoodOrderModal({ product, onClose, cart, setCart }) {
     } else {
       updatedCart.push(newItem);
     }
+
     setCart(updatedCart);
-
-    try {
-      setLoading(true);
-      const totalPrice = updatedCart.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      );
-
-      await axios.post("http://localhost:999/order-foods", {
-        foodItems: updatedCart.map((i) => ({
-          foodId: i._id,
-          name: i.name,
-          quantity: i.quantity,
-          price: i.price,
-        })),
-        totalPrice,
-      });
-
-      alert("Order saved successfully!");
-      onClose();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to save order");
-    } finally {
-      setLoading(false);
-    }
+    onClose();
   };
 
   return (

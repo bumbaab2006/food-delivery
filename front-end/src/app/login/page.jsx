@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // Алдааг хадгалах state
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async () => {
     setErrorMessage("");
@@ -21,12 +21,12 @@ export default function LoginPage() {
         email,
         password,
       });
-      console.log(response.data);
+      console.log("login console", response.data);
 
       if (response.data.loggedIn) {
-        // 🔹 Token хадгалах
-        localStorage.setItem("token", JSON.stringify(response.data.user));
-        router.push("/main"); // Амжилттай login бол main руу
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.user.role);
+        router.push("/main");
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Алдаа гарлаа!");
