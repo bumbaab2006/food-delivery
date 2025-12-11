@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import {
   Sheet,
@@ -15,9 +16,9 @@ export default function CartModal({
   onDecrease,
   onRemove,
   onCheckout,
+  deliveryLocation, // 🟢 from header
+  setDeliveryLocation, // 🟢 from header
 }) {
-  const [deliveryLocation, setDeliveryLocation] = React.useState("");
-
   const itemsTotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -58,7 +59,6 @@ export default function CartModal({
           </SheetTitle>
         </SheetHeader>
 
-        {/* Cart / Order Tabs */}
         <div className="flex mb-6 bg-[#1f1f1f] rounded-full p-1">
           <button className="w-1/2 py-2 rounded-full bg-red-500 text-center font-medium">
             Cart
@@ -68,7 +68,6 @@ export default function CartModal({
           </button>
         </div>
 
-        {/* My cart list */}
         <h3 className="text-lg font-semibold mb-3">My cart</h3>
 
         <div className="space-y-6">
@@ -91,9 +90,7 @@ export default function CartModal({
                   >
                     –
                   </button>
-
                   <span>{item.quantity}</span>
-
                   <button
                     onClick={() => onIncrease(item._id)}
                     className="px-2 py-1 bg-[#1f1f1f] rounded"
@@ -112,19 +109,17 @@ export default function CartModal({
           ))}
         </div>
 
-        {/* Delivery location */}
         <div className="mt-8">
           <h3 className="font-semibold mb-2">Delivery location</h3>
           <input
             type="text"
             placeholder="Please share your complete address"
-            value={deliveryLocation}
-            onChange={(e) => setDeliveryLocation(e.target.value)}
+            value={deliveryLocation} // 🟢 bind to header state
+            onChange={(e) => setDeliveryLocation(e.target.value)} // 🟢 update header
             className="w-full bg-transparent border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400"
           />
         </div>
 
-        {/* Payment Info */}
         <div className="mt-8 bg-[#1f1f1f] rounded-2xl p-4 text-sm">
           <h3 className="font-semibold text-lg mb-4">Payment info</h3>
 
@@ -146,7 +141,13 @@ export default function CartModal({
           </div>
 
           <button
-            onClick={() => onCheckout(deliveryLocation)}
+            onClick={() => {
+              if (!deliveryLocation) {
+                alert("Please enter delivery location!");
+                return;
+              }
+              onCheckout(deliveryLocation);
+            }}
             className="w-full bg-red-500 text-white py-3 rounded-xl mt-4 font-semibold"
           >
             Checkout

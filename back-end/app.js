@@ -5,12 +5,20 @@ const cors = require("cors");
 
 const app = express();
 
+// ✔ Fix CORS here
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: [
+      "http://localhost:3000",
+      "https://x32xf9g6-3000.asse.devtunnels.ms",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
   })
 );
+
+// ✔ Allow OPTIONS preflight
+app.options("*", cors());
 
 app.use(express.json());
 connectToDB();

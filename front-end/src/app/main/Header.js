@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import Logo from "../_icons/logo";
 import LocationIcon from "../_icons/LocationIcon";
@@ -9,6 +11,22 @@ import axios from "axios";
 
 export default function Header({ cart, setCart }) {
   const [showCart, setShowCart] = useState(false);
+  const [deliveryLocation, setDeliveryLocation] = useState(""); // 🟢 state lifting
+
+  const token = localStorage.getItem("token");
+
+  function decodeToken(token) {
+    if (!token) return null;
+    try {
+      const payload = token.split(".")[1];
+      return JSON.parse(atob(payload));
+    } catch (err) {
+      console.error("Invalid token", err);
+      return null;
+    }
+  }
+
+  const user = decodeToken(token);
 
   // Increase quantity
   const increaseQty = (id) => {
@@ -35,8 +53,18 @@ export default function Header({ cart, setCart }) {
     setCart((prev) => prev.filter((item) => item._id !== id));
   };
 
-  // Confirm Order + Delivery Location → DB
-  const confirmOrder = async (deliveryLocation) => {
+  // Confirm Order
+  // Confirm Order
+  const confirmOrder = async (location) => {
+    if (!user?.id) {
+      alert("Please login first!");
+      return;
+    }
+    if (!location) {
+      alert("Please enter delivery location!");
+      return;
+    }
+
     try {
       const totalPrice = cart.reduce(
         (acc, item) => acc + item.price * item.quantity,
@@ -44,6 +72,10 @@ export default function Header({ cart, setCart }) {
       );
 
       await axios.post("http://localhost:999/order-foods", {
+        user: {
+          id: user.id,
+          email: user.email,
+        },
         foodItems: cart.map((i) => ({
           foodId: i._id,
           name: i.name,
@@ -51,18 +83,20 @@ export default function Header({ cart, setCart }) {
           price: i.price,
         })),
         totalPrice,
-        deliveryLocation,
+        deliveryLocation: location,
       });
 
       alert("Order saved successfully!");
       setCart([]);
       setShowCart(false);
+      setDeliveryLocation("");
     } catch (err) {
-      console.error(err);
+      console.error("Order Save Error:", err);
       alert("Failed to save order");
     }
   };
 
+  console.log("user", user);
   return (
     <div className="flex flex-col w-full">
       <header className="flex items-center justify-between w-full h-16 px-20 bg-black">
@@ -75,12 +109,11 @@ export default function Header({ cart, setCart }) {
               Delivery address:
             </p>
             <p className="text-gray-500 text-xs font-normal leading-4">
-              Add Location
+              {deliveryLocation || "Add Location"} {/* 🟢 Display location */}
             </p>
             <AddresRightChevronIcon />
           </button>
 
-          {/* CART BUTTON */}
           <button
             className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 transition"
             onClick={() => setShowCart(true)}
@@ -88,7 +121,6 @@ export default function Header({ cart, setCart }) {
             <ShoppingIcon className="w-5 h-5" />
           </button>
 
-          {/* USER BUTTON */}
           <button className="flex items-center justify-center w-9 h-9 rounded-full bg-red-500 hover:bg-red-600 transition">
             <UserIcon className="w-5 h-5 text-white" />
           </button>
@@ -108,6 +140,8 @@ export default function Header({ cart, setCart }) {
         onDecrease={decreaseQty}
         onRemove={removeItem}
         onCheckout={confirmOrder}
+        deliveryLocation={deliveryLocation} // 🟢 pass state
+        setDeliveryLocation={setDeliveryLocation} // 🟢 pass setter
       />
     </div>
   );

@@ -2,6 +2,17 @@ const mongoose = require("mongoose");
 
 const orderedFoodsSchema = new mongoose.Schema(
   {
+    user: {
+      id: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+    },
+
     foodItems: [
       {
         foodId: {
@@ -14,6 +25,7 @@ const orderedFoodsSchema = new mongoose.Schema(
         price: { type: Number, required: true },
       },
     ],
+
     deliveryLocation: { type: String, required: true },
     totalPrice: { type: Number, required: true },
 
